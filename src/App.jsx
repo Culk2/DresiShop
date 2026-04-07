@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { seedState } from "./data";
+import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/react";
 import {
   buildId,
   currency,
@@ -11,11 +11,6 @@ import {
   saveState,
   todayString,
 } from "./utils";
-
-const tabs = [
-  { id: "shop", label: "Store" },
-  { id: "admin", label: "Admin" },
-];
 
 const categories = ["All", "Football", "Basketball", "Custom Jerseys", "New Arrivals"];
 const sizeOptions = ["All", "S", "M", "L", "XL"];
@@ -42,7 +37,7 @@ function detectCategory(product) {
 }
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState("shop");
+  const { isLoaded, isSignedIn, user } = useUser();
   const [state, setState] = useState(() => loadState());
   const [productForm, setProductForm] = useState(defaultProduct);
   const [selectedProductId, setSelectedProductId] = useState("");
@@ -73,6 +68,18 @@ export default function App() {
   useEffect(() => {
     saveState(state);
   }, [state]);
+
+  useEffect(() => {
+    if (!isLoaded || !isSignedIn || !user) {
+      return;
+    }
+
+    setCheckoutCustomer((current) => ({
+      ...current,
+      name: current.name || `${user.firstName || ""} ${user.lastName || ""}`.trim() || user.username || "",
+      email: current.email || user.primaryEmailAddress?.emailAddress || "",
+    }));
+  }, [isLoaded, isSignedIn, user]);
 
   useEffect(() => {
     if (!selectedProductId && state.products[0]) {
@@ -119,11 +126,6 @@ export default function App() {
       cancelled = true;
     };
   }, [selectedProductId, state.products]);
-
-  const revenue = useMemo(
-    () => state.orders.reduce((sum, order) => sum + Number(order.total), 0),
-    [state.orders],
-  );
 
   const lowStockProducts = useMemo(
     () => state.products.filter((product) => Number(product.stock) < 6),
@@ -228,7 +230,6 @@ export default function App() {
       price: String(product.price),
       stock: String(product.stock),
     });
-    setActiveTab("admin");
   }
 
   function deleteProduct(id) {
@@ -252,6 +253,11 @@ export default function App() {
   }
 
   function handleCheckout(product) {
+    if (!isSignedIn) {
+      alert("Za oddajo narocila se najprej prijavi.");
+      return;
+    }
+
     if (!checkoutCustomer.name || !checkoutCustomer.email) {
       alert("Vnesi ime in email kupca.");
       return;
@@ -405,30 +411,6 @@ export default function App() {
           <strong>SHOP</strong>
         </div>
 
-        <nav className="main-nav">
-          {categories.slice(1).map((item) => (
-            <button
-              key={item}
-              className={category === item ? "nav-chip active" : "nav-chip"}
-              onClick={() => {
-                setCategory(item);
-                setActiveTab("shop");
-              }}
-            >
-              {item}
-            </button>
-          ))}
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              className={activeTab === tab.id ? "nav-chip admin-link active" : "nav-chip admin-link"}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </nav>
-
         <div className="header-tools">
           <label className="search-shell">
             <span>Search</span>
@@ -442,59 +424,36 @@ export default function App() {
             Cart
             <span>{number(cartCount)}</span>
           </button>
+          <div className="auth-cluster">
+            {!isSignedIn ? (
+              <>
+                <SignInButton mode="modal">
+                  <button className="secondary-cta" type="button">
+                    Prijava
+                  </button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <button className="primary-cta" type="button">
+                    Registracija
+                  </button>
+                </SignUpButton>
+              </>
+            ) : null}
+            {isSignedIn ? (
+              <div className="user-shell">
+                <div>
+                  <span className="user-shell-label">Prijavljen uporabnik</span>
+                  <strong>{user?.firstName || user?.username || user?.primaryEmailAddress?.emailAddress}</strong>
+                </div>
+                <UserButton />
+              </div>
+            ) : null}
+          </div>
         </div>
       </header>
 
-      <main className="store-main">
-        {activeTab === "shop" ? (
+        <main className="store-main">
           <>
-            <section className="hero-section">
-              <div className="hero-copy">
-                <span className="section-tag">Premium Matchday Drop</span>
-                <h1>Elite jerseys for fans who want more than merch.</h1>
-                <p>
-                  Discover football and basketball kits with a premium storefront, bold visuals, smooth
-                  interactions, and a sports-first shopping experience.
-                </p>
-
-                <div className="hero-cta-row">
-                  <button className="primary-cta" onClick={() => setCategory("Football")}>
-                    Shop Football
-                  </button>
-                  <button className="secondary-cta" onClick={() => setCategory("New Arrivals")}>
-                    New Arrivals
-                  </button>
-                </div>
-
-                <div className="hero-stats">
-                  <HeroStat label="Products" value={number(state.products.length)} />
-                  <HeroStat label="Orders" value={number(state.orders.length)} />
-                  <HeroStat label="Revenue" value={currency(revenue)} />
-                </div>
-              </div>
-
-              <div className="hero-visual">
-                {heroProduct ? (
-                  <div className="hero-image-card">
-                    <img src={heroProduct.image} alt={heroProduct.name} />
-                    <div className="hero-image-overlay">
-                      <span>{heroProduct.club}</span>
-                      <strong>{heroProduct.name}</strong>
-                      <em>{currency(heroProduct.price)}</em>
-                    </div>
-                  </div>
-                ) : null}
-                <div className="floating-panel top">
-                  <span>Limited Edition</span>
-                  <strong>Season Drop</strong>
-                </div>
-                <div className="floating-panel bottom">
-                  <span>Quick Add</span>
-                  <strong>Fast checkout ready</strong>
-                </div>
-              </div>
-            </section>
-
             <section className="featured-strip">
               <div className="featured-copy">
                 <span className="section-tag">Trending Now</span>
@@ -666,12 +625,30 @@ export default function App() {
                 <span className="section-tag">Checkout Simulator</span>
                 <h2>Complete a test order from the storefront</h2>
                 <p>
-                  This block is here so the homepage still connects directly to your school project
-                  logic for customers, orders, and automatic email events.
+                  Prijava prek Clerk se tukaj uporabi za identifikacijo kupca. Prijavljen uporabnik
+                  lahko odda testno narocilo brez ponovnega vnosa emaila.
                 </p>
               </div>
 
               <div className="checkout-card">
+                {!isSignedIn ? (
+                  <div className="auth-callout">
+                    <strong>Za checkout potrebujes prijavo.</strong>
+                    <p>Ustvari racun ali se prijavi, da se narocilo shrani med stranke in narocila.</p>
+                    <div className="auth-callout-actions">
+                      <SignInButton mode="modal">
+                        <button className="secondary-cta" type="button">
+                          Prijava
+                        </button>
+                      </SignInButton>
+                      <SignUpButton mode="modal">
+                        <button className="primary-cta" type="button">
+                          Registracija
+                        </button>
+                      </SignUpButton>
+                    </div>
+                  </div>
+                ) : null}
                 <div className="checkout-fields">
                   <input
                     placeholder="Ime kupca"
@@ -701,7 +678,12 @@ export default function App() {
                       <span>Selected jersey</span>
                       <strong>{heroProduct.name}</strong>
                     </div>
-                    <button className="primary-cta" onClick={() => handleCheckout(heroProduct)}>
+                    <button
+                      className="primary-cta"
+                      onClick={() => handleCheckout(heroProduct)}
+                      disabled={!isSignedIn}
+                      type="button"
+                    >
                       Simulate order
                     </button>
                   </div>
@@ -740,185 +722,7 @@ export default function App() {
                 ) : null}
               </div>
             </section>
-          </>
-        ) : null}
-
-        {activeTab === "admin" ? (
-          <section className="admin-section">
-            <div className="admin-top">
-              <div>
-                <span className="section-tag">Admin Control</span>
-                <h2>CRUD, import, communication, and exports</h2>
-              </div>
-              <div className="admin-top-actions">
-                <label className="secondary-cta upload-shell">
-                  Import CSV/XLSX
-                  <input type="file" accept=".csv,.xlsx,.xls" onChange={handleImport} />
-                </label>
-                <button className="primary-cta" onClick={() => exportOrdersPdf(state.orders)}>
-                  Export PDF
-                </button>
-              </div>
-            </div>
-
-            <div className="admin-grid">
-              <section className="admin-card dark">
-                <h3>Sales by club</h3>
-                <div className="chart-list">
-                  {salesByClub.map(([club, total]) => (
-                    <div key={club} className="chart-row">
-                      <span>{club}</span>
-                      <div className="chart-bar-wrap">
-                        <div className="chart-bar" style={{ width: `${Math.min(total, 100)}%` }} />
-                      </div>
-                      <strong>{currency(total)}</strong>
-                    </div>
-                  ))}
-                </div>
-              </section>
-
-              <section className="admin-card">
-                <div className="admin-form-head">
-                  <h3>{productForm.id ? "Edit product" : "Add product"}</h3>
-                  <select value={sortBy} onChange={(event) => setSortBy(event.target.value)}>
-                    <option value="name">Sort by name</option>
-                    <option value="price">Sort by price</option>
-                    <option value="stock">Sort by stock</option>
-                  </select>
-                </div>
-
-                <form className="admin-form" onSubmit={handleProductSubmit}>
-                  <input
-                    placeholder="Product name"
-                    value={productForm.name}
-                    onChange={(event) =>
-                      setProductForm((current) => ({ ...current, name: event.target.value }))
-                    }
-                    required
-                  />
-                  <input
-                    placeholder="Club"
-                    value={productForm.club}
-                    onChange={(event) =>
-                      setProductForm((current) => ({ ...current, club: event.target.value }))
-                    }
-                    required
-                  />
-                  <input
-                    placeholder="League"
-                    value={productForm.league}
-                    onChange={(event) =>
-                      setProductForm((current) => ({ ...current, league: event.target.value }))
-                    }
-                    required
-                  />
-                  <input
-                    type="number"
-                    placeholder="Price"
-                    value={productForm.price}
-                    onChange={(event) =>
-                      setProductForm((current) => ({ ...current, price: event.target.value }))
-                    }
-                    required
-                  />
-                  <input
-                    type="number"
-                    placeholder="Stock"
-                    value={productForm.stock}
-                    onChange={(event) =>
-                      setProductForm((current) => ({ ...current, stock: event.target.value }))
-                    }
-                    required
-                  />
-                  <input
-                    placeholder="Image URL"
-                    value={productForm.image}
-                    onChange={(event) =>
-                      setProductForm((current) => ({ ...current, image: event.target.value }))
-                    }
-                    required
-                  />
-                  <button className="primary-cta" type="submit">
-                    Save product
-                  </button>
-                </form>
-              </section>
-            </div>
-
-            <div className="admin-grid">
-              <section className="admin-card">
-                <h3>Products</h3>
-                <div className="admin-table-wrap">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Product</th>
-                        <th>Club</th>
-                        <th>Price</th>
-                        <th>Stock</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredProducts.map((product) => (
-                        <tr key={product.id}>
-                          <td>{product.name}</td>
-                          <td>{product.club}</td>
-                          <td>{currency(product.price)}</td>
-                          <td>{product.stock}</td>
-                          <td className="actions-cell">
-                            <button onClick={() => editProduct(product)}>Edit</button>
-                            <button className="danger" onClick={() => deleteProduct(product.id)}>
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </section>
-
-              <section className="admin-card">
-                <h3>Emailing</h3>
-                <div className="email-layout">
-                  <div className="email-recipient-list">
-                    {state.customers.map((customer) => (
-                      <label key={customer.id} className="recipient-row">
-                        <input
-                          type="checkbox"
-                          checked={emailDraft.recipients.includes(customer.email)}
-                          onChange={() => toggleRecipient(customer.email)}
-                        />
-                        <span>
-                          {customer.name} ({customer.email})
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                  <div className="admin-form">
-                    <input
-                      value={emailDraft.subject}
-                      onChange={(event) =>
-                        setEmailDraft((current) => ({ ...current, subject: event.target.value }))
-                      }
-                    />
-                    <textarea
-                      rows="5"
-                      value={emailDraft.message}
-                      onChange={(event) =>
-                        setEmailDraft((current) => ({ ...current, message: event.target.value }))
-                      }
-                    />
-                    <button className="primary-cta" onClick={sendCampaign} type="button">
-                      Send campaign
-                    </button>
-                  </div>
-                </div>
-              </section>
-            </div>
-          </section>
-        ) : null}
+        </>
       </main>
 
       <footer className="store-footer">
@@ -933,15 +737,6 @@ export default function App() {
           <span>New Arrivals</span>
         </div>
       </footer>
-    </div>
-  );
-}
-
-function HeroStat({ label, value }) {
-  return (
-    <div className="hero-stat">
-      <span>{label}</span>
-      <strong>{value}</strong>
     </div>
   );
 }
