@@ -1,18 +1,18 @@
 :root {
-  color-scheme: dark;
-  --bg: #070b14;
-  --bg-2: #0d1322;
-  --panel: rgba(17, 24, 41, 0.72);
-  --panel-strong: rgba(12, 18, 32, 0.92);
-  --panel-soft: rgba(255, 255, 255, 0.06);
-  --text: #f5f7fb;
-  --muted: #96a2bb;
-  --line: rgba(255, 255, 255, 0.1);
-  --accent: #52e0ff;
-  --accent-2: #7b61ff;
-  --accent-3: #ff5f6d;
-  --success: #7dffb3;
-  --shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+  color-scheme: light;
+  --bg: #f6f8fc;
+  --bg-2: #ffffff;
+  --panel: rgba(255, 255, 255, 0.9);
+  --panel-strong: rgba(255, 255, 255, 0.98);
+  --panel-soft: rgba(15, 23, 42, 0.04);
+  --text: #162033;
+  --muted: #667085;
+  --line: rgba(15, 23, 42, 0.1);
+  --accent: #1683ff;
+  --accent-2: #5b8cff;
+  --accent-3: #ff7a59;
+  --success: #12b76a;
+  --shadow: 0 24px 60px rgba(28, 44, 78, 0.12);
   font-family: Inter, "Segoe UI", Arial, sans-serif;
 }
 
@@ -29,10 +29,10 @@ body {
   min-width: 320px;
   color: var(--text);
   background:
-    radial-gradient(circle at 15% 10%, rgba(82, 224, 255, 0.16), transparent 28%),
-    radial-gradient(circle at 85% 14%, rgba(123, 97, 255, 0.22), transparent 24%),
-    radial-gradient(circle at 50% 90%, rgba(255, 95, 109, 0.14), transparent 32%),
-    linear-gradient(180deg, #070b14 0%, #09101c 35%, #070b14 100%);
+    radial-gradient(circle at 10% 8%, rgba(22, 131, 255, 0.12), transparent 24%),
+    radial-gradient(circle at 88% 12%, rgba(91, 140, 255, 0.12), transparent 22%),
+    radial-gradient(circle at 50% 100%, rgba(255, 122, 89, 0.1), transparent 26%),
+    linear-gradient(180deg, #f9fbff 0%, #f3f6fb 40%, #eef2f8 100%);
 }
 
 #root {
@@ -131,14 +131,14 @@ table button {
 
 .nav-chip {
   padding: 12px 18px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(15, 23, 42, 0.04);
   color: var(--muted);
 }
 
 .nav-chip.active {
-  background: rgba(82, 224, 255, 0.14);
+  background: rgba(22, 131, 255, 0.12);
   color: var(--text);
-  border-color: rgba(82, 224, 255, 0.22);
+  border-color: rgba(22, 131, 255, 0.22);
 }
 
 .header-tools {
@@ -168,7 +168,7 @@ table button {
 .admin-form select,
 .admin-form textarea {
   width: 100%;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.92);
   color: var(--text);
   border: 1px solid var(--line);
   border-radius: 18px;
@@ -181,9 +181,9 @@ table button {
   align-items: center;
   gap: 10px;
   padding: 14px 18px;
-  background: linear-gradient(135deg, rgba(123, 97, 255, 0.26), rgba(82, 224, 255, 0.22));
+  background: linear-gradient(135deg, rgba(22, 131, 255, 0.14), rgba(91, 140, 255, 0.22));
   color: var(--text);
-  box-shadow: 0 0 0 rgba(82, 224, 255, 0);
+  box-shadow: 0 0 0 rgba(22, 131, 255, 0);
 }
 
 .cart-button span {
@@ -193,7 +193,7 @@ table button {
   min-width: 28px;
   height: 28px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(22, 131, 255, 0.12);
 }
 
 .user-shell {
@@ -202,7 +202,7 @@ table button {
   gap: 12px;
   padding: 10px 14px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.82);
   border: 1px solid var(--line);
 }
 
@@ -229,11 +229,11 @@ table button {
 @keyframes cartPulse {
   0% {
     transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(82, 224, 255, 0.45);
+    box-shadow: 0 0 0 0 rgba(22, 131, 255, 0.25);
   }
   70% {
     transform: scale(1.06);
-    box-shadow: 0 0 0 20px rgba(82, 224, 255, 0);
+    box-shadow: 0 0 0 20px rgba(22, 131, 255, 0);
   }
   100% {
     transform: scale(1);
@@ -267,12 +267,12 @@ table button {
 .buy-button,
 .quick-add-button {
   background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-  color: #071019;
+  color: #ffffff;
   font-weight: 700;
 }
 
 .secondary-cta {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.86);
   color: var(--text);
   border-color: var(--line);
 }
@@ -351,21 +351,21 @@ table button {
 
 .football-card {
   background:
-    linear-gradient(180deg, rgba(2, 7, 16, 0.1), rgba(2, 7, 16, 0.92)),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.08), rgba(15, 23, 42, 0.78)),
     url("https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=1200&q=80")
       center/cover;
 }
 
 .basketball-card {
   background:
-    linear-gradient(180deg, rgba(2, 7, 16, 0.08), rgba(2, 7, 16, 0.92)),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.08), rgba(15, 23, 42, 0.78)),
     url("https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=1200&q=80")
       center/cover;
 }
 
 .custom-card {
   background:
-    linear-gradient(180deg, rgba(2, 7, 16, 0.08), rgba(2, 7, 16, 0.92)),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.08), rgba(15, 23, 42, 0.78)),
     url("https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=1200&q=80")
       center/cover;
 }
@@ -418,7 +418,7 @@ table button {
 }
 
 .accent-card {
-  background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(82, 224, 255, 0.12));
+  background: linear-gradient(135deg, rgba(91, 140, 255, 0.14), rgba(22, 131, 255, 0.08));
 }
 
 .accent-card strong {
@@ -444,7 +444,7 @@ table button {
 .catalog-count {
   padding: 10px 14px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(15, 23, 42, 0.05);
 }
 
 .product-grid {
@@ -456,15 +456,15 @@ table button {
 .catalog-card {
   overflow: hidden;
   border-radius: 28px;
-  background: rgba(11, 17, 30, 0.94);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(15, 23, 42, 0.08);
   transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
 }
 
 .catalog-card:hover {
   transform: translateY(-8px);
-  border-color: rgba(82, 224, 255, 0.32);
-  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.42);
+  border-color: rgba(22, 131, 255, 0.22);
+  box-shadow: 0 22px 48px rgba(28, 44, 78, 0.16);
 }
 
 .catalog-image {
@@ -491,7 +491,7 @@ table button {
   align-items: flex-end;
   justify-content: center;
   padding: 18px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(3, 7, 15, 0.72));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(15, 23, 42, 0.12));
   opacity: 0;
   transition: opacity 220ms ease;
 }
@@ -605,7 +605,7 @@ table button {
 
 .checkout-fields input {
   width: 100%;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.92);
   color: var(--text);
   border: 1px solid var(--line);
   border-radius: 18px;
@@ -620,7 +620,7 @@ table button {
   gap: 16px;
   padding: 18px;
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(15, 23, 42, 0.04);
 }
 
 .checkout-highlight button:disabled {
@@ -655,7 +655,7 @@ table button {
 }
 
 .admin-card.dark {
-  background: linear-gradient(180deg, rgba(9, 14, 28, 0.94), rgba(5, 9, 19, 0.98));
+  background: linear-gradient(180deg, rgba(242, 247, 255, 0.98), rgba(232, 239, 250, 0.98));
 }
 
 .admin-form,
@@ -678,7 +678,7 @@ table button {
   gap: 10px;
   padding: 14px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(15, 23, 42, 0.04);
 }
 
 .chart-list {
@@ -697,7 +697,7 @@ table button {
   height: 12px;
   overflow: hidden;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.08);
 }
 
 .chart-bar {
@@ -718,7 +718,7 @@ table {
 th,
 td {
   padding: 14px 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
   text-align: left;
 }
 
@@ -728,7 +728,7 @@ th {
 
 table button {
   padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(15, 23, 42, 0.05);
   color: var(--text);
 }
 
@@ -761,7 +761,7 @@ table button {
   justify-content: space-between;
   margin-top: 36px;
   padding: 20px 0 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .store-footer strong {
