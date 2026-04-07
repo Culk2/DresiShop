@@ -1,0 +1,93 @@
+export const seedState = {
+  products: [
+    {
+      id: "P-1001",
+      name: "FC Barcelona Home 2025",
+      club: "Barcelona",
+      league: "La Liga",
+      price: 89.9,
+      stock: 12,
+      status: "Aktiven",
+      featured: true,
+      image:
+        "https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=900&q=80",
+    },
+    {
+      id: "P-1002",
+      name: "Real Madrid Away 2025",
+      club: "Real Madrid",
+      league: "La Liga",
+      price: 94.9,
+      stock: 8,
+      status: "Aktiven",
+      featured: false,
+      image:
+        "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=900&q=80",
+    },
+    {
+      id: "P-1003",
+      name: "Manchester United Retro",
+      club: "Manchester United",
+      league: "Premier League",
+      price: 74.9,
+      stock: 5,
+      status: "Nizek zaloga",
+      featured: true,
+      image:
+        "https://images.unsplash.com/photo-1522778034537-20a2486be803?auto=format&fit=crop&w=900&q=80",
+    },
+  ],
+  customers: [
+    {
+      id: "C-301",
+      name: "Luka Novak",
+      email: "luka.novak@example.com",
+      segment: "VIP",
+      city: "Ljubljana",
+      totalSpent: 184.8,
+    },
+    {
+      id: "C-302",
+      name: "Tina Kranjc",
+      email: "tina.kranjc@example.com",
+      segment: "Novi",
+      city: "Maribor",
+      totalSpent: 89.9,
+    },
+  ],
+  orders: [
+    {
+      id: "O-7001",
+      customerId: "C-301",
+      customerName: "Luka Novak",
+      productId: "P-1001",
+      productName: "FC Barcelona Home 2025",
+      quantity: 1,
+      total: 89.9,
+      status: "Plačano",
+      createdAt: "2026-04-05",
+    },
+    {
+      id: "O-7002",
+      customerId: "C-302",
+      customerName: "Tina Kranjc",
+      productId: "P-1002",
+      productName: "Real Madrid Away 2025",
+      quantity: 1,
+      total: 94.9,
+      status: "V obdelavi",
+      createdAt: "2026-04-06",
+    },
+  ],
+  emails: [
+    {
+      id: "M-1",
+      to: "luka.novak@example.com",
+      subject: "Tvoj nakup je potrjen",
+      type: "Avtomatski",
+      sentAt: "2026-04-05 13:30",
+      status: "Poslano",
+    },
+  ],
+  imports: [],
+};
