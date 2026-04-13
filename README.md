@@ -1,19 +1,16 @@
 # Dresi Shop
 
-React/Vite projekt za prodajo dresov z administracijskim delom, prilagojen kot osnova za solsko nalogo.
+React + Vite shop povezan s Clerk prijavo in Sanity bazo.
 
-## Vkljucene funkcionalnosti
+## Kaj zdaj dela
 
-- CRUD za izdelke v admin panelu
-- Clerk avtentikacija za prijavo, registracijo in zasciten admin del
-- pregled statistike, filtriranje in sortiranje
-- vizualizacija prodaje po klubih
-- uvoz izdelkov iz `.csv` ali `.xlsx`
-- simulacija nakupa z avtomatskim email dogodkom
-- rocno posiljanje obvestil strankam iz admin panela
-- izvoz narocil v `.pdf`
-- uporaba zunanjega API-ja za podatke o klubih
-- lokalno shranjevanje podatkov preko `localStorage`
+- izdelki se berejo in shranjujejo v Sanity
+- ob prvi prijavi se za Clerk uporabnika ustvari `userProfile` z vlogo `user`
+- admin lahko uporabnikom spremeni vlogo na `admin`
+- uporabnik lahko doda izdelke v kosarico in odda narocilo
+- oddano narocilo se shrani v Sanity, zaloga izdelkov pa se zmanjsa
+- admin panel prikaze vse uporabnike, narocila in katalog izdelkov
+- admin lahko izvozi narocila v PDF
 
 ## Zagon
 
@@ -22,10 +19,32 @@ npm install
 npm run dev
 ```
 
-## Clerk nastavitev
+## `.env`
 
-1. V Clerk Dashboard ustvari aplikacijo.
-2. Kopiraj `Publishable key`.
-3. Ustvari `.env` datoteko iz `.env.example`.
-4. Nastavi `VITE_CLERK_PUBLISHABLE_KEY=...`.
-5. Ponovno zazeni razvojni streznik z `npm run dev`.
+Projekt potrebuje:
+
+```env
+VITE_CLERK_PUBLISHABLE_KEY=...
+VITE_SANITY_PROJECT_ID=...
+VITE_SANITY_DATASET=production
+VITE_SANITY_API_TOKEN=...
+```
+
+## Sanity sheme
+
+Primer shem je v `sanity/schemaTypes/dresiShopSchema.js`.
+
+Ce imas Sanity Studio, dodaj:
+
+```js
+import { schemaTypes } from "./schemaTypes/dresiShopSchema";
+
+export default createSchema({
+  name: "default",
+  types: schemaTypes,
+});
+```
+
+## Opomba
+
+Ta verzija uporablja Sanity token v Vite frontendu, da lahko projekt deluje brez backend API-ja. To je primerno za demo ali solo projekt, ni pa varno za produkcijo. Za produkcijo prestavi vse write operacije na backend in zamenjaj token.
